@@ -38,7 +38,7 @@ function getFriendlyAuthError(error, fallback = 'Не удалось выпол�
 export function useAuth() {
   const restoring = useState('uk_auth_restoring', () => false)
   const { safeGet, safeSet, safeRemove } = useStorage()
-  const config = useRuntimeConfig()
+  const apiBase = useApiBase()
 
   const parseSavedUser = () => {
     const savedUser = safeGet('uk_user', '')
@@ -59,7 +59,7 @@ export function useAuth() {
   const fetchMe = async () => {
     if (!token.value) return null
     const me = await $fetch('/users/me', {
-      baseURL: config.public.apiBase,
+      baseURL: apiBase,
       timeout: API_TIMEOUT_MS,
       headers: { Authorization: `Bearer ${token.value}` }
     })
@@ -74,7 +74,7 @@ export function useAuth() {
     form.set('password', password)
     try {
       const loginResponse = await $fetch('/auth/login', {
-        baseURL: config.public.apiBase,
+        baseURL: apiBase,
         method: 'POST',
         timeout: API_TIMEOUT_MS,
         body: form,

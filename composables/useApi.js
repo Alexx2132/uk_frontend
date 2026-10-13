@@ -72,7 +72,7 @@ export function getApiErrorMessage(error, fallback = 'Не удалось вып
 }
 
 export function useApi() {
-  const config = useRuntimeConfig()
+  const apiBase = useApiBase()
   const auth = useAuth()
 
   const request = async (path, options = {}) => {
@@ -82,7 +82,7 @@ export function useApi() {
 
     try {
       return await $fetch(path, {
-        baseURL: config.public.apiBase,
+        baseURL: apiBase,
         timeout,
         ...fetchOptions,
         headers

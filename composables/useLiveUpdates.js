@@ -1,3 +1,5 @@
+import { createLiveUpdatesUrl } from '~/utils/liveUpdates'
+
 const listeners = new Set()
 let socket = null
 let reconnectTimer = null
@@ -58,13 +60,7 @@ export function useLiveUpdates() {
 
   const buildUrl = () => {
     if (!process.client || !auth.token.value) return ''
-    const apiBase = String(config.public.apiBase || '').replace(/\/$/, '')
-    if (!apiBase) return ''
-    const base = apiBase
-      .replace(/^http:\/\//i, 'ws://')
-      .replace(/^https:\/\//i, 'wss://')
-      .replace(/\/api\/v1$/i, '')
-    return `${base}/api/v1/ws/updates`
+    return createLiveUpdatesUrl(config.public.apiBase, window.location.origin)
   }
 
   const connect = () => {
